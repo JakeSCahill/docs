@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        branch: [main, v/24.1, v/23.3, api] # Add your predefined base branches here
+        branch: [main, 'v/24.1', 'v/23.3', api] # Add your predefined base branches here
 
     steps:
       - name: Checkout the repository
