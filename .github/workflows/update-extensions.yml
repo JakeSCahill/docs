@@ -40,10 +40,11 @@ jobs:
           git checkout -b update-branch-${{ matrix.branch }}
           git add package.json package-lock.json
           git commit -m "Update @redpanda-data/docs-extensions-and-macros"
+          git push origin update-branch-${{ matrix.branch }}
         env:
           ACCESS_TOKEN: ${{ secrets.ACTIONS_BOT_TOKEN }}
 
-      - name: Push changes and create pull request
+      - name: Create pull request
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "Update @redpanda-data/docs-extensions-and-macros"
