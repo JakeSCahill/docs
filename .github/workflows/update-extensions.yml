@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ matrix.branch }}
-          token: ${{ env.ACTIONS_BOT_TOKEN }}
+          token: ${{ secrets.ACTIONS_BOT_TOKEN }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -41,13 +41,13 @@ jobs:
           git add package.json package-lock.json
           git commit -m "Update @redpanda-data/docs-extensions-and-macros"
         env:
-          ACCESS_TOKEN: ${{ env.ACTIONS_BOT_TOKEN }}
+          ACCESS_TOKEN: ${{ secrets.ACTIONS_BOT_TOKEN }}
 
       - name: Push changes and create pull request
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "Update @redpanda-data/docs-extensions-and-macros"
-          git-token: ${{ env.ACTIONS_BOT_TOKEN }}
+          git-token: ${{ secrets.ACTIONS_BOT_TOKEN }}
           branch: update-branch-${{ matrix.branch }}
           base: ${{ matrix.branch }}
           title: "auto-docs: Update extensions on ${{ matrix.branch }}"
