@@ -1,59 +1,53 @@
----
 name: Fetch and Save Cloud API Spec
+
 on:
   workflow_dispatch:  # Allows manual trigger of the workflow
   repository_dispatch:  # Allows other repositories to trigger this workflow
     types: [trigger-cloud-api-docs]
+
 jobs:
   fetch-and-save-cloud-api-spec:
     runs-on: ubuntu-latest
+
     steps:
-      - name: configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_SM_READONLY_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SM_READONLY_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2
-      - name: get secrets from aws sm
-        uses: aws-actions/aws-secretsmanager-get-secrets@v2
-        with:
-          secret-ids: |
-            ,sdlc/prod/github/actions_bot_token
-          parse-json-secrets: true
-      - name: Check out repository (main branch)
+      - name: Checkout Main Branch
         uses: actions/checkout@v4
         with:
           ref: 'main'
           path: redpanda-docs
-          token: ${{ env.ACTIONS_BOT_TOKEN }}
-      - name: Set up Node.js
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set Up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - name: Install dependencies
+
+      - name: Install Dependencies
         run: |
           cd ./redpanda-docs/scripts/get-api-specs
           npm install
-      - name: Run the script and save the output
+
+      - name: Run Script and Save Output
         run: node ./redpanda-docs/scripts/get-api-specs/get-cloud-api-spec.js > ./redpanda-docs/cloud-api.yaml
         env:
-          VBOT_GITHUB_API_TOKEN: ${{ env.ACTIONS_BOT_TOKEN }}
-      - name: Checkout the repository
+          VBOT_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout API Branch
         uses: actions/checkout@v4
         with:
-          ref: api
-          token: ${{ env.ACTIONS_BOT_TOKEN }}
+          ref: api  # Checking out the api branch to save the generated file
           path: redpanda-docs-api
-        # Copy the generated file to the api branch
-      - name: Move generated file to API branch
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Move Generated File to API Branch
         run: mv ./redpanda-docs/cloud-api.yaml ./redpanda-docs-api/modules/ROOT/attachments/cloud-api.yaml
-      - name: Create pull request
+
+      - name: Commit and Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: "auto-docs: update @redpanda-data/docs-extensions-and-macros"
-          token: ${{ env.ACTIONS_BOT_TOKEN }}
-          branch: update-branch-api
+          commit-message: "auto-docs: Update Cloud API spec"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: update-branch-api  # Branch that the PR will be created from
           title: "auto-docs: Update Cloud API spec"
           body: "This PR updates the OpenAPI spec file for the Cloud API."
           labels: auto-docs
-          reviewers: JakeSCahill, kbatuigas
