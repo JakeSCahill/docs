@@ -36,12 +36,12 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: redpanda-docs
-      - run: cd redpanda-docs/setup-tests
       - name: Test docs
         if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'repository_dispatch' }}
         uses: doc-detective/github-action@v1
         with:
-          input: redpanda-docs/modules
+          input: ../modules
+          working_directory: redpanda-docs/setup-tests
           exit_on_fail: true
           # create a PR/issue only if the workflow wasn't already triggered by a PR
           create_pr_on_change: true
@@ -51,5 +51,6 @@ jobs:
         if: needs.setup.outputs.console == 'true'
         uses: doc-detective/github-action@v1
         with:
-          input: redpanda-docs/modules/console
+          input: ../modules/console
+          working_directory: redpanda-docs/setup-tests
           exit_on_fail: true
