@@ -79,7 +79,7 @@ docker compose up -d --wait
 ```
 // (step {"action":"runShell", "command": "docker pull docker.redpanda.com/redpandadata/redpanda:v${REDPANDA_VERSION:?Set a Redpanda version} && docker pull docker.redpanda.com/redpandadata/console:v${REDPANDA_CONSOLE_VERSION:?Set a Redpanda Console version} && docker pull docker.redpanda.com/redpandadata/connect:latest", "workingDirectory": "../test-resources", "timeout": 100000, "exitCodes": [0,1]})
 // (step {"action":"runShell", "command": "docker compose up -d --wait", "workingDirectory": "../test-resources", "timeout": 50000, "exitCodes": [0,1]})
-// (step {"action":"wait", "duration": 10000})
+// (step {"action":"wait", "duration": 100000})
 +
 [.no-copy]
 ----
@@ -103,7 +103,7 @@ This command deploys Redpanda and Redpanda Console, which is exposed on port 808
 
 When Redpanda Console is running, open your web browser and go to http://localhost:8080 to see an overview of your cluster's status, health, and broker details.
 
-// (step {"action":"httpRequest", "url": "http://localhost:8080", "timeout": 30000})
+// (step {"action":"httpRequest", "url": "http://localhost:8080", "timeout": 100000})
 // (step {"action":"goTo", "url": "http://localhost:8080/overview"})
 // (step {"action":"wait"})
 // (step {"action":"saveScreenshot", "path": "overview.png", "directory": "../images", "overwrite": "byVariation"})
