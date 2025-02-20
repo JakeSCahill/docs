@@ -6,6 +6,8 @@
 
 // (test start {"id":"console-quickstart", "description": "Console quickstart"})
 
+Hello, there.
+
 This quickstart introduces Redpanda Console, a powerful web UI for managing and monitoring your Redpanda clusters. Explore practical examples and scenarios to help you understand how to leverage Redpanda Console for different use cases, including data observability, Redpanda management, access control, and connectivity.
 
 [NOTE]
