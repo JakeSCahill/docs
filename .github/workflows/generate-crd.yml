@@ -34,7 +34,7 @@ jobs:
           TAG="${OPERATOR_TAG}"
           echo "Operator tag: $TAG"
           
-          if [[ "$TAG" == *"v2.4"* ]]; then
+          if [[ "$TAG" == *"v2.3"* ]]; then
             echo "Operator tag contains v2.4 - using docs branch v/24.3."
             if git ls-remote --exit-code --heads https://github.com/redpanda-data/docs.git v/24.3; then
               DOCS_BRANCH="v/24.3"
